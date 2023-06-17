@@ -8,14 +8,83 @@
 import SwiftUI
 
 struct ContentView: View {
+    let astronauts: [String: Astronaut] = Bundle.main.decode("astronauts.json")
+    let missions: [Mission] = Bundle.main.decode("missions.json")
+    
+    @State private var isGridLayout = true
+    
+    let columns = [
+        GridItem(.adaptive(minimum: 150))
+    ]
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        NavigationView {
+            Group {
+                if isGridLayout {
+                    ScrollView {
+                        LazyVGrid(columns: columns) {
+                            loopMission(missions: missions)
+                        }
+                        .padding([.horizontal, .bottom])
+                    }
+                } else {
+//                    ScrollView {
+//                        LazyVStack {
+//                            loopMission(missions: missions)
+//                        }
+//                    }
+                    List {
+                        loopMission(missions: missions)
+                    }
+                    .listStyle(.plain)
+                    .listRowBackground(Color.darkBackground)
+                }
+            }
+            .navigationTitle("Moonshot")
+//            .background(.lightBackground)
+            .preferredColorScheme(.dark)
+            .toolbar {
+                Button("Toggle", action: toolBarClicked)
+            }
         }
-        .padding()
+    }
+    
+    func loopMission(missions: [Mission]) -> some View  {
+        ForEach(missions) { mission in
+            NavigationLink {
+                MissionView(mission: mission, astronauts: astronauts)
+            } label: {
+                VStack {
+                    Image(mission.image)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 100, height: 100)
+                        .padding()
+                    
+                    VStack {
+                        Text(mission.displayName)
+                            .font(.headline)
+                            .foregroundColor(.white)
+                        
+                        Text(mission.formattedLaunchDate)
+                            .font(.caption)
+                            .foregroundColor(.white.opacity(0.5))
+                    }
+                    .padding(.vertical)
+                    .frame(maxWidth: .infinity)
+                    .background(.lightBackground)
+                }
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .overlay(
+                    RoundedRectangle(cornerSize: CGSize(width: 10, height: 10))
+                        .stroke(.lightBackground)
+                )
+            }
+        }
+    }
+    
+    func toolBarClicked() {
+        isGridLayout.toggle()
     }
 }
 
