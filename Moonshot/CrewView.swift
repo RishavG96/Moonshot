@@ -16,6 +16,7 @@ struct CrewView: View {
                 ForEach(crew, id: \.role) { crewMember in
                     NavigationLink {
                         AstronautView(astronaut: crewMember.astronaut)
+                            .accessibilityLabel("Click to view Details")
                     } label: {
                         HStack {
                             Image(crewMember.astronaut.id)
@@ -35,6 +36,9 @@ struct CrewView: View {
                                 Text(crewMember.role)
                                     .foregroundColor(.secondary)
                             }
+                            .accessibilityElement()
+                            .accessibilityLabel("Astronaut Name is \(crewMember.astronaut.name)")
+                            .accessibilityHint("With role \(crewMember.role)")
                         }
                         .padding(.horizontal)
                     }

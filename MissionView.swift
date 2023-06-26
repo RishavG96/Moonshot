@@ -25,12 +25,15 @@ struct MissionView: View {
                         .scaledToFit()
                         .frame(maxWidth: geometry.size.width * 0.6)
                         .padding(.top)
+                        .accessibilityLabel("Mission image name\(mission.image)")
                     
                     Text(mission.newFormatLaunchDate)
+                        .accessibilityLabel("Launed on\(mission.formattedLaunchDate)")
                     
                     VStack(alignment: .leading) {
                         
                         DividerView()
+                            .accessibilityHidden(true)
                         
                         Text("Mission Highlights")
                             .font(.title.bold())
@@ -39,6 +42,7 @@ struct MissionView: View {
                         Text(mission.description)
                         
                         DividerView()
+                            .accessibilityHidden(true)
                         
                         Text("Crew")
                             .font(.title.bold())

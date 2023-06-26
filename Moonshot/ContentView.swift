@@ -45,6 +45,7 @@ struct ContentView: View {
             .preferredColorScheme(.dark)
             .toolbar {
                 Button("Toggle", action: toolBarClicked)
+                    .accessibilityLabel("Press this to change layout")
             }
         }
     }
@@ -53,6 +54,7 @@ struct ContentView: View {
         ForEach(missions) { mission in
             NavigationLink {
                 MissionView(mission: mission, astronauts: astronauts)
+                    .accessibilityLabel("Click to view Details")
             } label: {
                 VStack {
                     Image(mission.image)
@@ -73,6 +75,9 @@ struct ContentView: View {
                     .padding(.vertical)
                     .frame(maxWidth: .infinity)
                     .background(.lightBackground)
+                    .accessibilityElement()
+                    .accessibilityLabel("\(mission.displayName) launched on")
+                    .accessibilityHint("\(mission.formattedLaunchDate)")
                 }
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .overlay(
